@@ -1,0 +1,8 @@
+{
+"name": "Olho do Capeta iOS",
+"short_name": "Olho",
+"display": "standalone",
+"background_color": "#000000",
+"theme_color": "#ff0000",
+"start_url": "/"
+}
