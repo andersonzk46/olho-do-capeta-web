@@ -5,32 +5,64 @@ document.getElementById("logs")
 
 logs.innerHTML = ""
 
-const mensagens = [
+const horario =
+new Date().toLocaleString()
 
-"INICIANDO SCANNER...",
+const atividades = [
 
-"VERIFICANDO SISTEMA...",
-
-"ANALISANDO INTEGRIDADE...",
-
-"PROCURANDO MODIFICAÇÕES...",
-
-"SISTEMA PROTEGIDO."
+"[+] INICIANDO SCAN...",
+"[+] VERIFICANDO SISTEMA...",
+"[+] ANALISANDO INTEGRIDADE...",
+"[+] VERIFICANDO CONFIGURAÇÕES...",
+"[+] VERIFICANDO ARQUIVOS SUSPEITOS...",
+"[+] GERANDO RELATÓRIO..."
 ]
 
 let i = 0
 
 const interval = setInterval(() => {
 
-if (i >= mensagens.length) {
+if (i >= atividades.length) {
 
 clearInterval(interval)
+
+logs.innerHTML += `
+
+<hr>
+
+<h3>RELATÓRIO FINAL</h3>
+
+<p>
+STATUS: SISTEMA PROTEGIDO
+</p>
+
+<p>
+HORÁRIO: ${horario}
+</p>
+
+<p>
+ATIVIDADES ANALISADAS:
+</p>
+
+<ul>
+
+<li>Integridade do sistema</li>
+
+<li>Arquivos suspeitos</li>
+
+<li>Configurações do navegador</li>
+
+<li>Sessão ativa</li>
+
+</ul>
+
+`
 
 return
 }
 
 logs.innerHTML +=
-`<p>${mensagens[i]}</p>`
+`<p>${atividades[i]}</p>`
 
 i++
 
