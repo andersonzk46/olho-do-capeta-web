@@ -1,9 +1,57 @@
+let risco = 0
+
+function detectarDevTools() {
+
+setInterval(() => {
+
+const widthThreshold =
+window.outerWidth - window.innerWidth > 160
+
+const heightThreshold =
+window.outerHeight - window.innerHeight > 160
+
+if (widthThreshold || heightThreshold) {
+
+console.log("DEVTOOLS DETECTADO")
+
+risco += 15
+}
+
+}, 1000)
+}
+
+function exportarRelatorio(texto) {
+
+const blob =
+new Blob([texto], {type:"text/plain"})
+
+const link =
+document.createElement("a")
+
+link.href =
+URL.createObjectURL(blob)
+
+link.download =
+"relatorio_olho_do_capeta.txt"
+
+link.click()
+}
+
 async function startScan() {
 
 const logs =
 document.getElementById("logs")
 
+if (!logs) {
+
+alert("INTEGRIDADE COMPROMETIDA")
+
+return
+}
+
 logs.innerHTML = ""
+
+risco = 0
 
 const horario =
 new Date().toLocaleString()
@@ -23,6 +71,8 @@ const atividades = [
 "[+] VERIFICANDO INTEGRIDADE...",
 
 "[+] ANALISANDO DESEMPENHO...",
+
+"[+] ANALISANDO NAVEGADOR...",
 
 "[+] GERANDO RELATÓRIO..."
 ]
@@ -68,6 +118,54 @@ navigator.onLine
 ? "ONLINE"
 : "OFFLINE"
 
+if (conexao === "OFFLINE") {
+
+risco += 10
+}
+
+const relatorio = `
+
+==============================
+
+OLHO DO CAPETA IOS
+
+Criado por @andersonnzk46
+
+==============================
+
+STATUS:
+MONITORAMENTO CONCLUÍDO
+
+HORÁRIO:
+${horario}
+
+STATUS DA REDE:
+${conexao}
+
+IP:
+${ip}
+
+CPU:
+${cpu}
+
+MEMÓRIA:
+${memoria}
+
+SCORE DE RISCO:
+${risco}/100
+
+ATIVIDADES ANALISADAS:
+
+- Verificação de rede
+- Análise de conexão
+- Possível VPN/proxy
+- Integridade do Web App
+- Sessão ativa
+- Navegador
+- Desempenho
+
+`
+
 logs.innerHTML += `
 
 <hr style="border-color:red;">
@@ -76,63 +174,21 @@ logs.innerHTML += `
 RELATÓRIO FINAL
 </h2>
 
-<p>
-STATUS:
-MONITORAMENTO CONCLUÍDO
-</p>
+<pre style="
+color:red;
+white-space:pre-wrap;
+font-size:14px;
+">
 
-<p>
-HORÁRIO:
-${horario}
-</p>
+${relatorio}
 
-<p>
-STATUS DA REDE:
-${conexao}
-</p>
+</pre>
 
-<p>
-IP DETECTADO:
-${ip}
-</p>
+<button onclick='exportarRelatorio(`${relatorio}`)'>
 
-<p>
-CPU:
-${cpu}
-</p>
+EXPORTAR RELATÓRIO
 
-<p>
-MEMÓRIA:
-${memoria}
-</p>
-
-<h3>
-INFORMAÇÕES DO NAVEGADOR
-</h3>
-
-<p style="font-size:12px;">
-${navegador}
-</p>
-
-<h3>
-ATIVIDADES ANALISADAS
-</h3>
-
-<ul>
-
-<li>Verificação de rede</li>
-
-<li>Análise de conexão</li>
-
-<li>Possível VPN/proxy</li>
-
-<li>Status da sessão</li>
-
-<li>Integridade do Web App</li>
-
-<li>Análise de desempenho</li>
-
-</ul>
+</button>
 
 `
 
@@ -146,3 +202,5 @@ i++
 
 }, 1200)
 }
+
+detectarDevTools()
