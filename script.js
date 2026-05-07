@@ -12,42 +12,62 @@ window.outerHeight - window.innerHeight > 160
 
 if (widthThreshold || heightThreshold) {
 
-console.log("DEVTOOLS DETECTADO")
-
-risco += 15
+risco += 25
 }
 
 }, 1000)
 }
 
-function exportarRelatorio(texto) {
+function detectarAmbienteSuspeito() {
 
-const blob =
-new Blob([texto], {type:"text/plain"})
+const ua =
+navigator.userAgent.toLowerCase()
 
-const link =
-document.createElement("a")
+if (ua.includes("headless")) {
 
-link.href =
-URL.createObjectURL(blob)
+risco += 40
+}
 
-link.download =
-"relatorio_olho_do_capeta.txt"
+if (!navigator.cookieEnabled) {
 
-link.click()
+risco += 10
+}
+
+if (!navigator.onLine) {
+
+risco += 15
+}
+}
+
+async function analisarRede() {
+
+const inicio = performance.now()
+
+try {
+
+await fetch(
+"https://api.ipify.org?format=json"
+)
+
+const fim = performance.now()
+
+const tempo = fim - inicio
+
+if (tempo > 1000) {
+
+risco += 20
+}
+
+} catch {
+
+risco += 15
+}
 }
 
 async function startScan() {
 
 const logs =
 document.getElementById("logs")
-
-if (!logs) {
-
-alert("ERRO NO SISTEMA")
-
-return
-}
 
 logs.innerHTML = ""
 
@@ -64,16 +84,20 @@ const atividades = [
 
 "[+] ANALISANDO CONEXÃO...",
 
+"[+] ANALISANDO LATÊNCIA...",
+
 "[+] VERIFICANDO POSSÍVEL VPN...",
 
-"[+] ANALISANDO SESSÃO...",
+"[+] ANALISANDO NAVEGADOR...",
 
 "[+] VERIFICANDO INTEGRIDADE...",
 
-"[+] ANALISANDO DESEMPENHO...",
-
 "[+] GERANDO RELATÓRIO..."
 ]
+
+detectarAmbienteSuspeito()
+
+await analisarRede()
 
 let i = 0
 
@@ -102,13 +126,25 @@ ip = data.ip
 ip = "Erro ao obter IP"
 }
 
-const navegador =
-navigator.userAgent
-
 const conexao =
 navigator.onLine
 ? "ONLINE"
 : "OFFLINE"
+
+const navegador =
+navigator.userAgent
+
+let status = "BAIXO"
+
+if (risco >= 30) {
+
+status = "MÉDIO"
+}
+
+if (risco >= 60) {
+
+status = "ALTO"
+}
 
 const relatorio = `
 
@@ -117,7 +153,10 @@ OLHO DO CAPETA IOS
 Criado por @andersonnzk46
 
 STATUS:
-MONITORAMENTO CONCLUÍDO
+${status}
+
+RISCO:
+${risco}/100
 
 HORÁRIO:
 ${horario}
@@ -128,11 +167,14 @@ ${conexao}
 IP:
 ${ip}
 
-RISCO:
-${risco}/100
-
 NAVEGADOR:
 ${navegador}
+
+ANÁLISE:
+- Ambiente monitorado
+- Rede analisada
+- Navegador verificado
+- Sessão ativa
 
 `
 
@@ -153,12 +195,6 @@ font-size:14px;
 ${relatorio}
 
 </pre>
-
-<button onclick="exportarRelatorio(\`${relatorio}\`)">
-
-EXPORTAR RELATÓRIO
-
-</button>
 
 `
 
