@@ -44,7 +44,7 @@ document.getElementById("logs")
 
 if (!logs) {
 
-alert("INTEGRIDADE COMPROMETIDA")
+alert("ERRO NO SISTEMA")
 
 return
 }
@@ -71,8 +71,6 @@ const atividades = [
 "[+] VERIFICANDO INTEGRIDADE...",
 
 "[+] ANALISANDO DESEMPENHO...",
-
-"[+] ANALISANDO NAVEGADOR...",
 
 "[+] GERANDO RELATÓRIO..."
 ]
@@ -107,31 +105,16 @@ ip = "Erro ao obter IP"
 const navegador =
 navigator.userAgent
 
-const memoria =
-navigator.deviceMemory || "Indisponível"
-
-const cpu =
-navigator.hardwareConcurrency || "Indisponível"
-
 const conexao =
 navigator.onLine
 ? "ONLINE"
 : "OFFLINE"
 
-if (conexao === "OFFLINE") {
-
-risco += 10
-}
-
 const relatorio = `
-
-==============================
 
 OLHO DO CAPETA IOS
 
 Criado por @andersonnzk46
-
-==============================
 
 STATUS:
 MONITORAMENTO CONCLUÍDO
@@ -139,30 +122,17 @@ MONITORAMENTO CONCLUÍDO
 HORÁRIO:
 ${horario}
 
-STATUS DA REDE:
+REDE:
 ${conexao}
 
 IP:
 ${ip}
 
-CPU:
-${cpu}
-
-MEMÓRIA:
-${memoria}
-
-SCORE DE RISCO:
+RISCO:
 ${risco}/100
 
-ATIVIDADES ANALISADAS:
-
-- Verificação de rede
-- Análise de conexão
-- Possível VPN/proxy
-- Integridade do Web App
-- Sessão ativa
-- Navegador
-- Desempenho
+NAVEGADOR:
+${navegador}
 
 `
 
@@ -184,7 +154,7 @@ ${relatorio}
 
 </pre>
 
-<button onclick='exportarRelatorio(`${relatorio}`)'>
+<button onclick="exportarRelatorio(\`${relatorio}\`)">
 
 EXPORTAR RELATÓRIO
 
