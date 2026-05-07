@@ -18,6 +18,12 @@ const atividades = [
 
 "[+] VERIFICANDO POSSÍVEL VPN...",
 
+"[+] ANALISANDO SESSÃO...",
+
+"[+] VERIFICANDO INTEGRIDADE...",
+
+"[+] ANALISANDO DESEMPENHO...",
+
 "[+] GERANDO RELATÓRIO..."
 ]
 
@@ -34,7 +40,9 @@ let ip = "Não identificado"
 try {
 
 const resposta =
-await fetch("https://api.ipify.org?format=json")
+await fetch(
+"https://api.ipify.org?format=json"
+)
 
 const data =
 await resposta.json()
@@ -45,6 +53,20 @@ ip = data.ip
 
 ip = "Erro ao obter IP"
 }
+
+const navegador =
+navigator.userAgent
+
+const memoria =
+navigator.deviceMemory || "Indisponível"
+
+const cpu =
+navigator.hardwareConcurrency || "Indisponível"
+
+const conexao =
+navigator.onLine
+? "ONLINE"
+: "OFFLINE"
 
 logs.innerHTML += `
 
@@ -65,23 +87,50 @@ ${horario}
 </p>
 
 <p>
+STATUS DA REDE:
+${conexao}
+</p>
+
+<p>
 IP DETECTADO:
 ${ip}
 </p>
 
 <p>
-REDE ANALISADA:
+CPU:
+${cpu}
 </p>
+
+<p>
+MEMÓRIA:
+${memoria}
+</p>
+
+<h3>
+INFORMAÇÕES DO NAVEGADOR
+</h3>
+
+<p style="font-size:12px;">
+${navegador}
+</p>
+
+<h3>
+ATIVIDADES ANALISADAS
+</h3>
 
 <ul>
 
-<li>Conexão ativa</li>
+<li>Verificação de rede</li>
 
-<li>Possível uso de proxy/VPN</li>
+<li>Análise de conexão</li>
+
+<li>Possível VPN/proxy</li>
 
 <li>Status da sessão</li>
 
-<li>Integridade do navegador</li>
+<li>Integridade do Web App</li>
+
+<li>Análise de desempenho</li>
 
 </ul>
 
