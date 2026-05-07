@@ -1,0 +1,75 @@
+body {
+
+margin: 0;
+padding: 0;
+
+background: black;
+
+font-family: monospace;
+
+color: red;
+}
+
+.container {
+
+padding: 30px;
+
+text-align: center;
+}
+
+h1 {
+
+font-size: 40px;
+
+animation: glow 1s infinite alternate;
+}
+
+@keyframes glow {
+
+from {
+
+text-shadow: 0 0 10px red;
+}
+
+to {
+
+text-shadow: 0 0 30px red;
+}
+}
+
+button {
+
+margin-top: 20px;
+
+background: red;
+
+color: black;
+
+border: none;
+
+padding: 15px;
+
+width: 250px;
+
+font-size: 20px;
+
+border-radius: 10px;
+}
+
+#logs {
+
+margin-top: 30px;
+
+border: 1px solid red;
+
+padding: 20px;
+
+min-height: 200px;
+
+text-align: left;
+}
+
+.credits {
+
+color: gray;
+}
