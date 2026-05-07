@@ -1,4 +1,4 @@
-function startScan() {
+async function startScan() {
 
 const logs =
 document.getElementById("logs")
@@ -10,49 +10,78 @@ new Date().toLocaleString()
 
 const atividades = [
 
-"[+] INICIANDO SCAN...",
-"[+] VERIFICANDO SISTEMA...",
-"[+] ANALISANDO INTEGRIDADE...",
-"[+] VERIFICANDO CONFIGURAÇÕES...",
-"[+] VERIFICANDO ARQUIVOS SUSPEITOS...",
+"[+] INICIANDO SCANNER...",
+
+"[+] VERIFICANDO REDE...",
+
+"[+] ANALISANDO CONEXÃO...",
+
+"[+] VERIFICANDO POSSÍVEL VPN...",
+
 "[+] GERANDO RELATÓRIO..."
 ]
 
 let i = 0
 
-const interval = setInterval(() => {
+const interval = setInterval(async () => {
 
 if (i >= atividades.length) {
 
 clearInterval(interval)
 
+let ip = "Não identificado"
+
+try {
+
+const resposta =
+await fetch("https://api.ipify.org?format=json")
+
+const data =
+await resposta.json()
+
+ip = data.ip
+
+} catch {
+
+ip = "Erro ao obter IP"
+}
+
 logs.innerHTML += `
 
-<hr>
+<hr style="border-color:red;">
 
-<h3>RELATÓRIO FINAL</h3>
+<h2 style="color:red;">
+RELATÓRIO FINAL
+</h2>
 
 <p>
-STATUS: SISTEMA PROTEGIDO
+STATUS:
+MONITORAMENTO CONCLUÍDO
 </p>
 
 <p>
-HORÁRIO: ${horario}
+HORÁRIO:
+${horario}
 </p>
 
 <p>
-ATIVIDADES ANALISADAS:
+IP DETECTADO:
+${ip}
+</p>
+
+<p>
+REDE ANALISADA:
 </p>
 
 <ul>
 
-<li>Integridade do sistema</li>
+<li>Conexão ativa</li>
 
-<li>Arquivos suspeitos</li>
+<li>Possível uso de proxy/VPN</li>
 
-<li>Configurações do navegador</li>
+<li>Status da sessão</li>
 
-<li>Sessão ativa</li>
+<li>Integridade do navegador</li>
 
 </ul>
 
